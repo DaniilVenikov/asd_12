@@ -27,15 +27,14 @@ class NativeCache<T>
 
     public int seekSlot(String value)
     {
-        int firstIndex = hashFun(value);
-        int resultIndex = firstIndex;
+        int index = hashFun(value);
 
-        do {
-            if (slots[resultIndex] == null) {
-                return resultIndex;
+        for (int i = 0; i < size; i ++) {
+            if (slots[index] == null) {
+                return index;
             }
-            resultIndex = (resultIndex + STEP) % size;
-        } while (resultIndex != firstIndex);
+            index = (index + STEP) % size;
+        }
 
         return -1;
     }
@@ -67,14 +66,13 @@ class NativeCache<T>
     public T get(String key)
     {
         int index = hashFun(key);
-        int resultIndex = index;
 
         for (int i = 0; i < size; i++) {
-            if (slots[resultIndex] != null && slots[resultIndex].equals(key)) {
+            if (slots[index] != null && slots[index].equals(key)) {
                 hits[index]++;
-                return values[resultIndex];
+                return values[index];
             }
-            resultIndex = (resultIndex + STEP) % size;
+            index = (index + STEP) % size;
         }
 
         return null;
